@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import 'trip.dart';
+import 'data/trip.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
