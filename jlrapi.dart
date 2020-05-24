@@ -65,7 +65,7 @@ class Connection {
         "EV_IS_PLUGGED_IN" : "UNKNOWN",
         "EV_RANGE_ON_BATTERY_KM": "300.0",
         "EV_RANGE_ON_BATTERY_MILES": "232.0",
-        // "EV_RANGE_GET_ME_HOMEx10": "200.4",
+        "EV_RANGE_GET_ME_HOMEx10": "200.4",
         // "EV_RANGE_COMFORTx10": "192.7",
         "EV_RANGE_ECOx10" : "196.5",
 
@@ -86,6 +86,11 @@ class Connection {
         "nickname" : "Mr. Jag (Demo Car)",
         "exteriorColorName": "Black",
         "registrationNumber": "XX11111", // DK version
+        "country": "DNK",
+        "vehicleBrand": "Jaguar",
+        "vehicleType": "I-PACE",
+        "vehicleTypeCode": "X590",
+        "modelYear": "2020",
       };
       list.add(demoCar);
       return list;
@@ -295,11 +300,9 @@ class Vehicle {
     vehicleAttributes = {};
     print(parsed);
     // vehicleAttributes = parsed;
-    /*
-    parsed.forEach((keyValuePair) => {
-      vehicleAttributes[keyValuePair["key"]] = keyValuePair["value"]
-    });
-    */
+    
+    parsed.forEach((k, v) => vehicleAttributes[k] = v.toString()); // keyValuePair["value"].toString());
+    print(vehicleAttributes);
     carName = parsed["nickname"];
     return vehicleAttributes;
   }
