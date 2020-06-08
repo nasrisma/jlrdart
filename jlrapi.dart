@@ -55,7 +55,7 @@ class Connection {
     if (_email == 'demo') {
       List<Vehicle> list = [];
       Vehicle demoCar = Vehicle('', true);
-      demoCar.carName = "Mr. Jag";
+      demoCar.carName = "Mr. Jag (DEMO)";
       demoCar.stateOfCharge = 55;
       demoCar.vehicleStatus = {
         "ODOMETER_METER_RESOLUTION": "true",
@@ -69,6 +69,10 @@ class Connection {
         // "EV_RANGE_COMFORTx10": "192.7",
         "EV_RANGE_ECOx10" : "196.5",
 
+        "DOOR_IS_ALL_DOORS_LOCKED" : "TRUE",
+        "WASHER_FLUID_WARN": "NORMAL",
+        "BRAKE_FLUID_WARN": "NORMAL",
+
         "TYRE_PRESSURE_FRONT_RIGHT": "221",
         "TYRE_PRESSURE_FRONT_LEFT" : "202",
         "TYRE_PRESSURE_REAR_RIGHT" : "203",
@@ -78,7 +82,8 @@ class Connection {
         "EV_BATTERY_PRECONDITIONING_STATUS": "UNKNOWN",
         "TU_STATUS_PRIMARY_VOLT": "4.1000000000000005",
         "TU_STATUS_PRIMARY_CHARGE_PERCENT": "70",
-        // EXT_KILOMETERS_TO_SERVICE = '19220'
+        "EXT_KILOMETERS_TO_SERVICE": "19220",
+
         // VEHICLE_STATE_TYPE = 'KEY_REMOVED'
         "ODOMETER_METER" : "99999000"
       };
