@@ -12,9 +12,9 @@ const String IFOP_BASE_ULR = "https://ifop.prod-row.jlrmotor.com/ifop/jlr";
 const String IFOP_BASE_HOST = "ifop.prod-row.jlrmotor.com";
 const String IFOP_BASE_PATH = "/ifop/jlr";
 
-const String IF9_BASE_URL  = "https://if9.prod-row.jlrmotor.com/if9/jlr";
-const String IF9_BASE_HOST  = "if9.prod-row.jlrmotor.com";
-const String IF9_BASE_PATH  = "/if9/jlr";
+const String IF9_BASE_URL = "https://if9.prod-row.jlrmotor.com/if9/jlr";
+const String IF9_BASE_HOST = "if9.prod-row.jlrmotor.com";
+const String IF9_BASE_PATH = "/if9/jlr";
 
 class Connection {
   // Main credentials
@@ -36,7 +36,6 @@ class Connection {
   Map<String, String> oauth;
 
   Future<List<Vehicle>> connect() async {
-
     print('connect...');
     if (refreshToken != null) {
       // Not handled...TODO: set oauth to refresh and nothing else...
@@ -46,11 +45,7 @@ class Connection {
       var uuid = Uuid();
       deviceId = uuid.v4();
     }
-    oauth = {
-      "grant_type": "password",
-      "username": _email,
-      "password": _password
-    };
+    oauth = {"grant_type": "password", "username": _email, "password": _password};
 
     if (_email == 'demo') {
       List<Vehicle> list = [];
@@ -62,21 +57,21 @@ class Connection {
         "EV_CHARGING_STATUS": "CHARGING",
         "EV_CHARGING_RATE_KM_PER_HOUR": "28",
         "EV_STATE_OF_CHARGE": "56",
-        "EV_IS_PLUGGED_IN" : "UNKNOWN",
+        "EV_IS_PLUGGED_IN": "UNKNOWN",
         "EV_RANGE_ON_BATTERY_KM": "300.0",
         "EV_RANGE_ON_BATTERY_MILES": "232.0",
         "EV_RANGE_GET_ME_HOMEx10": "200.4",
         // "EV_RANGE_COMFORTx10": "192.7",
-        "EV_RANGE_ECOx10" : "196.5",
+        "EV_RANGE_ECOx10": "196.5",
 
-        "DOOR_IS_ALL_DOORS_LOCKED" : "TRUE",
+        "DOOR_IS_ALL_DOORS_LOCKED": "TRUE",
         "WASHER_FLUID_WARN": "NORMAL",
         "BRAKE_FLUID_WARN": "NORMAL",
 
         "TYRE_PRESSURE_FRONT_RIGHT": "221",
-        "TYRE_PRESSURE_FRONT_LEFT" : "202",
-        "TYRE_PRESSURE_REAR_RIGHT" : "203",
-        "TYRE_PRESSURE_REAR_LEFT"  : "204",
+        "TYRE_PRESSURE_FRONT_LEFT": "202",
+        "TYRE_PRESSURE_REAR_RIGHT": "203",
+        "TYRE_PRESSURE_REAR_LEFT": "204",
 
         "BATTERY_VOLTAGE": "13.11",
         "EV_BATTERY_PRECONDITIONING_STATUS": "UNKNOWN",
@@ -85,10 +80,10 @@ class Connection {
         "EXT_KILOMETERS_TO_SERVICE": "19220",
 
         // VEHICLE_STATE_TYPE = 'KEY_REMOVED'
-        "ODOMETER_METER" : "99999000"
+        "ODOMETER_METER": "99999000"
       };
       demoCar.vehicleAttributes = {
-        "nickname" : "Mr. Jag (Demo Car)",
+        "nickname": "Mr. Jag (Demo Car)",
         "exteriorColorName": "Black",
         "registrationNumber": "XX11111", // DK version
         "country": "DNK",
@@ -105,24 +100,20 @@ class Connection {
       final response = await _authenticate(oauth);
       final resp = await utf8.decoder.bind(response).join();
       _registerAuth(resp);
-      
+
       await _registerDeviceId();
       await _loginUser();
     }
     final vehicleResponse = await getVehicles();
     final parsed = jsonDecode(vehicleResponse);
-    
-    List<Vehicle> list = parsed["vehicles"]
-      .map<Vehicle>((jsonItem) => Vehicle(
-        jsonItem["vin"],
-        false
-        )).toList();
+
+    List<Vehicle> list = parsed["vehicles"].map<Vehicle>((jsonItem) => Vehicle(jsonItem["vin"], false)).toList();
 
     Connection.mainVin = list[0]._vin;
     // await list[0].getStatus();
     // await list[0].getAttributes();
     // await list[0].getHealthStatus();
-    return list; 
+    return list;
   }
 
   void setCredentials(String email, String password) {
@@ -164,12 +155,7 @@ class Connection {
     final String _path = IFOP_BASE_PATH + "/users/" + Uri.encodeFull(_email) + "/clients";
     Uri uri = Uri(host: _host, path: _path, scheme: "https", port: 443);
 
-    Map<String, String> data = {
-      "access_token": accessToken,
-      "authorization_token": authToken,
-      "expires_in": "86400",
-      "deviceID": deviceId
-    };
+    Map<String, String> data = {"access_token": accessToken, "authorization_token": authToken, "expires_in": "86400", "deviceID": deviceId};
 
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
@@ -270,9 +256,7 @@ class Vehicle {
     // print(parsed);
     print(parsed["vehicleStatus"]);
     vehicleStatus = {};
-    parsed["vehicleStatus"].forEach((keyValuePair) => {
-      vehicleStatus[keyValuePair["key"]] = keyValuePair["value"]
-    });
+    parsed["vehicleStatus"].forEach((keyValuePair) => {vehicleStatus[keyValuePair["key"]] = keyValuePair["value"]});
 
     stateOfCharge = int.parse(vehicleStatus["EV_STATE_OF_CHARGE"]);
 
@@ -305,7 +289,7 @@ class Vehicle {
     vehicleAttributes = {};
     print(parsed);
     // vehicleAttributes = parsed;
-    
+
     parsed.forEach((k, v) => vehicleAttributes[k] = v.toString()); // keyValuePair["value"].toString());
     print(vehicleAttributes);
     carName = parsed["nickname"];
@@ -332,9 +316,7 @@ class Vehicle {
 
     String vhsData = await _authenticateEmptyPinProtectedService("VHS");
     return {"x": "y"};
-    Map<String, String> vhsPostData = {
-      "x": "y"
-    };
+    Map<String, String> vhsPostData = {"x": "y"};
 
     HttpClientRequest request = await client.getUrl(uri)
       ..headers.add("Authorization", "Bearer " + Connection.accessToken)
@@ -373,15 +355,12 @@ class Vehicle {
 
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
 
-    Map<String, String> data = {
-      "serviceName": serviceName,
-      "pin": ""
-    };
+    Map<String, String> data = {"serviceName": serviceName, "pin": ""};
 
     // 404 error here...
     HttpClientRequest request = await client.postUrl(uri)
       ..headers.add("Authorization", "Bearer " + Connection.accessToken)
-      ..headers.add("Content-Type",  "application/vnd.wirelesscar.ngtp.if9.AuthenticateRequest-v2+json; charset=utf-8")
+      ..headers.add("Content-Type", "application/vnd.wirelesscar.ngtp.if9.AuthenticateRequest-v2+json; charset=utf-8")
       ..headers.add("X-Device-Id", Connection.deviceId)
       // ..headers.add("Accept", "application/vnd.wirelesscar.ngtp.if9.ServiceStatus-v4+json")
       ..write(jsonEncode(data));
@@ -404,7 +383,7 @@ class Vehicle {
    */
   Future<Map<String, String>> preconditioningStart(int targetTemperatureCelcius) async {
     List serviceParameters = [
-      {"key": "PRECONDITIONING","value": "START"},
+      {"key": "PRECONDITIONING", "value": "START"},
       {"key": "TARGET_TEMPERATURE_CELSIUS", "value": targetTemperatureCelcius.toString()}
     ];
     Map<String, String> result = await preconditioningControl(serviceParameters);
@@ -434,9 +413,7 @@ class Vehicle {
     }
 
     // String eccData = await _authenticateEmptyPinProtectedService("ECC");
-    Map<String, List> eccData2 = {
-      'serviceParameters': serviceParameters
-    };
+    Map<String, List> eccData2 = {'serviceParameters': serviceParameters};
 
     HttpClientRequest request = await client.postUrl(uri)
       ..headers.add("Authorization", "Bearer " + Connection.accessToken)
@@ -461,7 +438,8 @@ class Vehicle {
   */
   Future<List<Trip>> getTrips(int count) async {
     print("getTrips");
-    Uri uri = _createUri("trips?count=" + count.toString());
+    // Uri uri = _createUri("trips?count=" + count.toString());
+    Uri uri = _createUri("trips", query: "count=" + count.toString());
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
 
@@ -469,28 +447,13 @@ class Vehicle {
       Trip demoTrip = Trip("42", name: "Demo trip 1");
       demoTrip.tripDetails = {
         "startTime": "2020-01-01T12:00:00+0000",
-        "startPosition": {
-          "address": "Abbey Rd, Whitley, Coventry CV3 4LF"
-        },
-        "endPosition": {
-          "address": "Dummy end address"
-        },
-        "totalEcoScore": {
-          "score": 78.0,
-          "scoreStatus": "VALID"
-        },
-         "throttleEcoScore":{
-            "score": 3.9,
-            "scoreStatus": "VALID"
-        },
-        "speedEcoScore":{
-            "score": 3.9,
-            "scoreStatus": "VALID"
-        },
-        "brakeEcoScore":{
-            "score": 5.0,
-            "scoreStatus": "VALID"
-        },
+        "startPosition": {"address": "Abbey Rd, Whitley, Coventry CV3 4LF"},
+        "endTime": "2020-01-01T12:42:00+0000",
+        "endPosition": {"address": "Dummy end address"},
+        "totalEcoScore": {"score": 78.0, "scoreStatus": "VALID"},
+        "throttleEcoScore": {"score": 3.9, "scoreStatus": "VALID"},
+        "speedEcoScore": {"score": 3.9, "scoreStatus": "VALID"},
+        "brakeEcoScore": {"score": 5.0, "scoreStatus": "VALID"},
         "averageSpeed": 78.0,
         "averageEnergyConsumption": 3.21,
         "energyRegenerated": 0.8,
@@ -508,19 +471,12 @@ class Vehicle {
     HttpClientResponse response = await request.close();
     final decoded = await utf8.decoder.bind(response).join();
     final parsed = jsonDecode(decoded);
+    // print(parsed);
+    // print(parsed["trips"]);
     print(parsed["trips"]);
 
     List<Trip> trips = [];
-    parsed["trips"].forEach((trip) => {
-      trips.add(
-        Trip(trip["id"].toString(),
-          name: trip["name"],
-          category: trip["category"],
-          routeDetails: trip["routeDetails"],
-          tripDetails: trip["tripDetails"]
-        )
-      )
-    });
+    parsed["trips"].forEach((trip) => {trips.add(Trip(trip["id"].toString(), name: trip["name"], category: trip["category"], routeDetails: trip["routeDetails"], tripDetails: trip["tripDetails"]))});
     return trips;
   }
 
@@ -557,10 +513,10 @@ class Vehicle {
     return trip;
   }
 
-  Uri _createUri(String command) {
+  Uri _createUri(String command, {String query}) {
     final String _host = IF9_BASE_HOST;
     final String _path = IF9_BASE_PATH + "/vehicles/" + _vin + "/" + command;
-    Uri uri = Uri(host: _host, path: _path, scheme: "https", port: 443);
+    Uri uri = Uri(host: _host, path: _path, scheme: "https", port: 443, query: query);
     return uri;
   }
 }
